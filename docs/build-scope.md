@@ -86,3 +86,34 @@ Supabase's managed cloud has **no UAE/Middle East region** `[VERIFIED — Supaba
 - [ ] *(Advanced, optional)* usability test with 1–2 people → report → v2
 
 **Quality bar (global standards applied throughout, not as a final pass):** security, accessibility (WCAG 2.2), and reliability skills are the definition of done for every screen we build.
+
+---
+
+## 7. Progress tracker — where we are *(updated 2026-11-13)*
+
+Mapped to the course **Build & Launch Checklist** (14 steps). Legend: ✅ done · 🟡 partial · ⬜ not started.
+
+| # | Checklist step | Status | Where it lives |
+|---|---|---|---|
+| 1 | Make Vercel + Supabase accounts | ⬜ | Needed at deploy; our twist = local Supabase now, UAE-resident later (ADR-0004) |
+| 2 | Check computer is ready (Node.js) | ⬜ | Quick check before scaffolding |
+| 3 | Gather Week 2 documents | ✅ | Week 2 deliverables = source of truth |
+| 4 | **Scaffold Next.js + MUI** (working skeleton) | ⬜ | **Next build action** |
+| 5 | Architect the app (3 tiers, written) | 🟡 | `build-plan.md` + this doc |
+| 6 | Write ADRs | ✅ | 4 ADRs in `docs/adr/` (course needs ≥3) |
+| 7 | Design database tables (+ migration, + RLS) | ⬜ | Uses Database Design Template; produces the ERD |
+| 8 | Connect app to Supabase (keys, `.env.local`) | ⬜ | Keep Your App Safe checklist; re-teach keys/env-vars/git here |
+| 9 | Build features one at a time (sign-up first) | ⬜ | Golden thread §2.3 |
+| 10 | Run & test locally (2 accounts, RLS check) | ⬜ | Prove per-patient isolation |
+| 11–13 | Deploy to Vercel + test live (incl. phone) | ⬜ | Resolve demo-DB residency decision here (seed data only) |
+| 14 | Fill Submission Template, email teacher | ⬜ | Make repo public / add teacher |
+
+**Plain read:** the **thinking + documentation foundation is finished and committed** — decisions, scope, roadmap, glossary (steps 3, 5, 6). Everything remaining is **build → test → deploy → submit**. We front-loaded the hard reasoning on purpose, so the build rests on solid ground.
+
+### Phased path for the rest
+- **Phase A — Foundation** (steps 2, 4): check Node → scaffold the skeleton → commit.
+- **Phase B — Data layer** (steps 7, 8): design tables + draw the **ERD**, create the migration, run local Supabase, turn on **RLS**, wire auth. *(keys/env-vars/git re-taught hands-on here)*
+- **Phase C — Features** (step 9): build the golden thread one feature at a time, sign-up first.
+- **Phase D — Test locally** (step 10): two accounts; confirm one patient can't see another's data.
+- **Phase E — Deploy** (steps 1, 11–13): accounts → live on Vercel → test desktop + phone. **Demo uses seed/fake data only**; UAE-resident production hosting stays launch-gated (ADR-0004, `roadmap-to-market.md` §8).
+- **Phase F — Submit** (step 14): Submission Template → repo public / add teacher → email `mdenner@techfleet.org`.
