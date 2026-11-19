@@ -23,7 +23,7 @@ Same phases as `build-plan.md`, same order — a **thinner slice through each ph
 ### 2.1 Foundation — the non-functional spine *(build-plan Phase 0)*
 - Next.js + Material UI app, in GitHub, deployed to **Vercel** · `[T1]`
 - **Supabase** for database + auth + file storage · `[T2]` *(region: see §5 flag)*
-- **Sign up / log in** (Supabase Auth)
+- **Sign up / log in** (Supabase Auth) — basic email/password this week; **strong password policy + 2FA / MFA** flagged on the backlog for production (healthcare account-security hardening) → §4.1
 - **Roles** (patient / clinician / admin) + **Row-Level Security** — each patient sees only their own records; clinicians see assigned cases · `[T3]`
 - **Core data model** — `Case` + stages, plus Patient, Clinician/Staff, Intake, Appointment, Consultation, Prescription/Plan, Product (with EDE-status flag), LabOrder · `[T2]`
 - **Security & privacy baseline** — encryption (Supabase defaults: TLS + at-rest), an **audit-log** table (who viewed/changed what), a **consent** record captured in the flow · `[T4 · T5]`
@@ -61,6 +61,22 @@ We build the **real data fields and records**, and show a clear **"activated at 
 ## 4. Out of scope this week
 
 Everything already deferred in Week 2 `scope.md`: hormone/TRT/HRT pathway, automated follow-up/refill engine, native mobile app, real-time chat, analytics dashboards, and **any controlled/semi-controlled medicine via telehealth** (permanently out · `[VERIFIED — ST-14 §17.12.7]`). Plus, for time: full third-party scheduling/video/payment *integrations* (built-ready instead, §3), full admin configuration breadth, and the standalone polish passes (applied per-screen as we go — §6).
+
+---
+
+### 4.1 Parked ideas — captured so we don't lose them *(raised by Jasmine, 2026-11-16)*
+
+Good instincts raised during the data-model design. All real; none built this week. **Because we use migrations-as-code (ADR-0003), each can be added later with a small, numbered migration — no rebuild.** Recorded here so we can safely defer them.
+
+| Idea | Verdict | Where it lands | Proof / basis |
+|---|---|---|---|
+| **Pharmacy orders** — what the patient ordered, coordinated with the compounding pharmacy | Launch-gated (build-ready, not faked) | A future `orders` / fulfillment table switched on with live pharmacy integration. Clinical decision is already captured now in `prescriptions`. | §3 "Pharmacy dispensing — manual notification now; live pharmacy integration later" |
+| **Reorders / refills** | Out of scope this week | Part of the deferred follow-up/refill engine (future tables + logic) | §4 "automated follow-up/refill engine" |
+| **Follow-up dates** | Out of scope this week | Same follow-up engine | §4 |
+| **Dosage guidance on products** | Add later via migration | One text column added to `products` when the prescribing screen needs it; keep `products` lean now | migrations-as-code (§2.1 dev-ops rails) |
+| **Terms & conditions acceptance** | In scope (already) | The *acceptance* is data → `consents` table (+ `audit_log` timestamp). The T&C *text itself* is a published document/page, not DB data. | §2.1 "a consent record captured in the flow" |
+| **Strong password policy + 2FA / MFA** | Backlog — production hardening | Enforced at the **auth step** (§2.1 sign-up): minimum-strength passwords + two-factor login. Basic email/password this week; harden before real patients. | Healthcare account security; `security` skill (auth), PDPL safeguards |
+| **Products catalog visibility** | Revisit later (open) | RLS currently lets **any signed-in user read all `products`**. May later restrict (e.g. hide non-EDE-cleared items, role-based visibility, or per-clinic catalogs). Kept open for now pending more info. | Decision 2026-11-19 — Jasmine flagged to revisit |
 
 ---
 
