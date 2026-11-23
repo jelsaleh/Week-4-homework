@@ -1,9 +1,9 @@
 "use client";
 
-// Auth-aware page: shows a login form when signed out, and a "signed-in" view
-// when signed in. The signed-in view lists the profiles this user is allowed to
-// see — which, thanks to RLS, is only their OWN row. That's our RLS proof.
-import { useEffect, useState } from "react";
+// Auth-aware page: login form when signed out; a patient dashboard when signed in.
+// The dashboard books a consultation (inserts a `case`, exercising the write-RLS
+// `with check` policy) and lists the patient's own cases (read RLS shows only theirs).
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { Session } from "@supabase/supabase-js";
 import Container from "@mui/material/Container";
@@ -13,43 +13,59 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import Chip from "@mui/material/Chip";
+import Link from "next/link";
 
-type Profile = { id: string; full_name: string; role: string };
+type CaseRow = { id: string; stage: string; created_at: string };
 
 export default function AccountPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [loadingSession, setLoadingSession] = useState(true);
+  const [fullName, setFullName] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [cases, setCases] = useState<CaseRow[]>([]);
+  const [booking, setBooking] = useState(false);
+  const [bookError, setBookError] = useState<string | null>(null);
 
-  // Track the login session (and keep it in sync on login/logout).
+  // Track the login session.
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoadingSession(false);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s);
-    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  // When signed in, load the profiles RLS lets this user see.
-  useEffect(() => {
+  // Load this patient's name + their cases (RLS returns only their own).
+  const loadData = useCallback(async () => {
     if (!session) {
-      setProfiles([]);
+      setCases([]);
+      setFullName("");
       return;
     }
-    supabase
+    const { data: profile } = await supabase
       .from("profiles")
-      .select("id, full_name, role")
-      .then(({ data }) => setProfiles(data ?? []));
+      .select("full_name")
+      .eq("id", session.user.id)
+      .single();
+    setFullName(profile?.full_name ?? "");
+
+    const { data: caseRows } = await supabase
+      .from("cases")
+      .select("id, stage, created_at")
+      .order("created_at", { ascending: false });
+    setCases(caseRows ?? []);
   }, [session]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -67,6 +83,24 @@ export default function AccountPage() {
     await supabase.auth.signOut();
   }
 
+  async function handleBook() {
+    if (!session) return;
+    setBookError(null);
+    setBooking(true);
+    // Create a case owned by this patient. The write-RLS `with check` policy
+    // verifies patient_id = auth.uid() before allowing the insert. stage
+    // defaults to 'intake' in the database.
+    const { error: insertError } = await supabase
+      .from("cases")
+      .insert({ patient_id: session.user.id });
+    setBooking(false);
+    if (insertError) {
+      setBookError(insertError.message);
+      return;
+    }
+    loadData();
+  }
+
   if (loadingSession) {
     return (
       <Container maxWidth="sm">
@@ -77,42 +111,76 @@ export default function AccountPage() {
     );
   }
 
-  // --- Signed-in view (with the RLS demo) ---
+  // --- Patient dashboard ---
   if (session) {
     return (
       <Container maxWidth="sm">
         <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <Stack spacing={3} sx={{ width: "100%", py: 8 }}>
             <Typography variant="h4" component="h1" fontWeight={700}>
-              You&apos;re signed in
+              Welcome, {fullName || session.user.email}
             </Typography>
             <Typography color="text.secondary">
-              Logged in as <strong>{session.user.email}</strong>.
+              Book a consultation to start your care journey.
             </Typography>
 
+            {bookError && <Alert severity="error">{bookError}</Alert>}
+
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleBook}
+              disabled={booking}
+            >
+              {booking ? "Booking…" : "Book a consultation"}
+            </Button>
+
             <Typography variant="h6" component="h2">
-              Profiles you can see
+              Your cases
             </Typography>
-            <Alert severity="info">
-              RLS returns only the rows you&apos;re allowed to see — you should see
-              exactly one: your own.
-            </Alert>
-            <Stack spacing={1}>
-              {profiles.map((p) => (
-                <Box
-                  key={p.id}
-                  sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}
-                >
-                  <Typography fontWeight={600}>{p.full_name || "(no name)"}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    role: {p.role}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
-            <Typography variant="body2" color="text.secondary">
-              Rows visible to you: <strong>{profiles.length}</strong>
-            </Typography>
+            {cases.length === 0 ? (
+              <Typography color="text.secondary">No consultations yet.</Typography>
+            ) : (
+              <Stack spacing={1}>
+                {cases.map((c) => (
+                  <Box
+                    key={c.id}
+                    sx={{
+                      p: 2,
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box>
+                        <Typography fontWeight={600}>
+                          Case {c.id.slice(0, 8)}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {new Date(c.created_at).toLocaleDateString()}
+                        </Typography>
+                      </Box>
+                      <Chip label={c.stage} color="primary" variant="outlined" />
+                    </Box>
+                    <Button
+                      component={Link}
+                      href={`/intake/${c.id}`}
+                      size="small"
+                      sx={{ mt: 1 }}
+                    >
+                      Add intake
+                    </Button>
+                  </Box>
+                ))}
+              </Stack>
+            )}
 
             <Button variant="outlined" onClick={handleLogout}>
               Log out
