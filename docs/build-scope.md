@@ -77,6 +77,7 @@ Good instincts raised during the data-model design. All real; none built this we
 | **Terms & conditions acceptance** | In scope (already) | The *acceptance* is data → `consents` table (+ `audit_log` timestamp). The T&C *text itself* is a published document/page, not DB data. | §2.1 "a consent record captured in the flow" |
 | **Strong password policy + 2FA / MFA** | Backlog — production hardening | Enforced at the **auth step** (§2.1 sign-up): minimum-strength passwords + two-factor login. Basic email/password this week; harden before real patients. | Healthcare account security; `security` skill (auth), PDPL safeguards |
 | **Products catalog visibility** | Revisit later (open) | RLS currently lets **any signed-in user read all `products`**. May later restrict (e.g. hide non-EDE-cleared items, role-based visibility, or per-clinic catalogs). Kept open for now pending more info. | Decision 2026-11-19 — Jasmine flagged to revisit |
+| **Email confirmation (auth)** | Re-enable for production | Turned **OFF** in Supabase for local testing (fake test emails can't receive confirmation links). **Real patients must confirm their email before first login** — turn back on before go-live. | Dev convenience 2026-11-23; security for production |
 
 ---
 
