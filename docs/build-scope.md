@@ -78,6 +78,8 @@ Good instincts raised during the data-model design. All real; none built this we
 | **Strong password policy + 2FA / MFA** | Backlog — production hardening | Enforced at the **auth step** (§2.1 sign-up): minimum-strength passwords + two-factor login. Basic email/password this week; harden before real patients. | Healthcare account security; `security` skill (auth), PDPL safeguards |
 | **Products catalog visibility** | Revisit later (open) | RLS currently lets **any signed-in user read all `products`**. May later restrict (e.g. hide non-EDE-cleared items, role-based visibility, or per-clinic catalogs). Kept open for now pending more info. | Decision 2026-11-19 — Jasmine flagged to revisit |
 | **Email confirmation (auth)** | Re-enable for production | Turned **OFF** in Supabase for local testing (fake test emails can't receive confirmation links). **Real patients must confirm their email before first login** — turn back on before go-live. | Dev convenience 2026-11-23; security for production |
+| **No empty cases (intake required)** | UX polish — later | Booking currently creates a case immediately; if the patient abandons the intake, a case exists with no intake. Fix later: create the case only when the intake is submitted (atomic), or treat incomplete cases as resumable drafts. | Jasmine flagged 2026-11-23 |
+| **One active booking / amend vs cancel** | Business rule — clinical input needed | Should a patient have multiple open cases, or one at a time (cancel/amend first)? Depends on how the clinic operates — decide with clinical governance, not in homework. | Jasmine flagged 2026-11-23 |
 
 ---
 
