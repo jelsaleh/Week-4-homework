@@ -52,7 +52,7 @@ function IntakeForm() {
       spacing={3}
       sx={{ width: "100%", py: 8 }}
     >
-      <Typography variant="h4" component="h1" fontWeight={700}>
+      <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
         Medical intake
       </Typography>
       <Typography color="text.secondary">Case {caseId.slice(0, 8)}</Typography>

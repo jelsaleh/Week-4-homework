@@ -51,7 +51,7 @@ export default function SignUpPage() {
           spacing={3}
           sx={{ width: "100%", py: 8 }}
         >
-          <Typography variant="h4" component="h1" fontWeight={700}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
             Create your account
           </Typography>
           <Typography variant="body1" color="text.secondary">

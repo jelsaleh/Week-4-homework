@@ -21,7 +21,7 @@ export default function Home() {
             variant="outlined"
             sx={{ alignSelf: "flex-start" }}
           />
-          <Typography variant="h3" component="h1" fontWeight={700}>
+          <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
             Peptide &amp; IV Telehealth
           </Typography>
           <Typography variant="body1" color="text.secondary">

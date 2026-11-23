@@ -121,7 +121,7 @@ export default function AccountPage() {
       <Container maxWidth="sm">
         <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
           <Stack spacing={3} sx={{ width: "100%", py: 8 }}>
-            <Typography variant="h4" component="h1" fontWeight={700}>
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
               Welcome, {fullName || session.user.email}
             </Typography>
             <Typography color="text.secondary">
@@ -164,7 +164,7 @@ export default function AccountPage() {
                       }}
                     >
                       <Box>
-                        <Typography fontWeight={600}>
+                        <Typography sx={{ fontWeight: 600 }}>
                           Case {c.id.slice(0, 8)}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
@@ -205,7 +205,7 @@ export default function AccountPage() {
           spacing={3}
           sx={{ width: "100%", py: 8 }}
         >
-          <Typography variant="h4" component="h1" fontWeight={700}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
             Log in
           </Typography>
           <Typography color="text.secondary">Access your telehealth account.</Typography>
