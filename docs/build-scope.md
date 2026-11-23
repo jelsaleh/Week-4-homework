@@ -108,6 +108,8 @@ Supabase's managed cloud has **no UAE/Middle East region** `[VERIFIED — Supaba
 
 ## 7. Progress tracker — where we are *(updated 2026-11-13)*
 
+> **Live status now lives in [`docs/status-and-gaps.md`](status-and-gaps.md)** (homework progress + market-ready gaps). The snapshot below is kept for history.
+
 Mapped to the course **Build & Launch Checklist** (14 steps). Legend: ✅ done · 🟡 partial · ⬜ not started.
 
 | # | Checklist step | Status | Where it lives |
