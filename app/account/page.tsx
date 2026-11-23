@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Chip from "@mui/material/Chip";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type CaseRow = { id: string; stage: string; created_at: string };
 
@@ -31,6 +32,7 @@ export default function AccountPage() {
   const [cases, setCases] = useState<CaseRow[]>([]);
   const [booking, setBooking] = useState(false);
   const [bookError, setBookError] = useState<string | null>(null);
+  const router = useRouter();
 
   // Track the login session.
   useEffect(() => {
@@ -87,18 +89,20 @@ export default function AccountPage() {
     if (!session) return;
     setBookError(null);
     setBooking(true);
-    // Create a case owned by this patient. The write-RLS `with check` policy
-    // verifies patient_id = auth.uid() before allowing the insert. stage
-    // defaults to 'intake' in the database.
-    const { error: insertError } = await supabase
+    // Create a case owned by this patient (write-RLS `with check` verifies
+    // patient_id = auth.uid()). `.select().single()` returns the new row so we
+    // can go straight to its intake form — matching the real patient flow.
+    const { data, error: insertError } = await supabase
       .from("cases")
-      .insert({ patient_id: session.user.id });
+      .insert({ patient_id: session.user.id })
+      .select("id")
+      .single();
     setBooking(false);
-    if (insertError) {
-      setBookError(insertError.message);
+    if (insertError || !data) {
+      setBookError(insertError?.message ?? "Could not create the case.");
       return;
     }
-    loadData();
+    router.push(`/intake/${data.id}`);
   }
 
   if (loadingSession) {
