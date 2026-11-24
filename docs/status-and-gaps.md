@@ -1,6 +1,6 @@
 # Status & Gap Tracker — Week 4 build
 
-*Live snapshot of where the build stands, and the gaps to close for a market-ready product. Last updated: 2026-11-23.*
+*Live snapshot of where the build stands, and the gaps to close for a market-ready product. Last updated: 2026-11-24.*
 
 > **Decision (2026-11-23):** prioritise **finishing the Week 4 homework** to catch up with the curriculum. The full **market-ready** product is deferred to **after the course (December)** — the gaps below are tracked so they can be closed deliberately, not forgotten.
 
@@ -16,21 +16,17 @@
 | **Each person sees only their own data (RLS)** | ✅ **Done & verified with two accounts** |
 | ≥ 3 ADRs in `docs/adr/` | ✅ Done (4) |
 | Database diagram in `docs/` | ✅ `docs/database-erd.md` |
-| Golden thread works end to end (book → case → intake → consult → plan) | 🟡 In progress — auth done; patient journey being built thin |
-| Live on Vercel (public URL) | ⬜ Not yet |
-| Backlog tickets → Done | ⬜ Pending |
-| Submission template + email teacher + repo submittable | ⬜ Not yet |
+| Golden thread works end to end (book → case → intake → portal) | ✅ Done & verified live (Alice/Bob) |
+| Live on Vercel (public URL) | ✅ Done — tested on desktop (phone pending) |
+| Backlog tickets → Done | ✅ 11 shipped tickets moved to Done; 3 remaining-scope tickets tracked (Refs 88–90) |
+| Submission template + email teacher + repo submittable | 🟡 Pending — Jasmine fills the template (no AI); phone test + hand-in left |
 | *(optional)* usability test | ⬜ Not yet |
 
 ## B. Remaining to finish the homework (ordered)
 
-1. **Thin golden thread** — enough of the patient journey to be genuinely end-to-end:
-   - Add **write-side RLS policies** (a patient may create/read their own cases + intakes).
-   - Patient dashboard → **"Book a consultation"** creates a `case`.
-   - **Medical intake** form → saves to `intakes`.
-   - Patient portal → shows their case status/history.
-2. **Deploy to Vercel** — set the env vars in Vercel, ship a public URL, test on desktop + phone. *(Demo uses seed/fake data only.)*
-3. **Submission** — fill the Submission Template, make the repo public (or add the teacher), email `mdenner@techfleet.org`.
+1. ~~**Thin golden thread**~~ ✅ **Done** — write-side RLS added; book → case → intake → portal works and was verified live.
+2. ~~**Deploy to Vercel**~~ ✅ **Done** — public URL live, desktop tested. **Left: open it on a phone and test (step 13).**
+3. **Submission** — fill the **Submission Template yourself (no AI)**; confirm the repo is submittable (public or add the teacher); hand in per the Week 4 assignment page.
 
 ---
 
@@ -50,6 +46,21 @@ Nearly all of these are **already designed/deferred**, not missed. Grouped, with
 | **Accessibility (WCAG 2.2)** | Full audit (built per-screen as we go) | `accessibility` skill |
 | **Payments + VAT, pharmacy dispensing, video** | Live providers wired at go-live | build-scope §3 |
 | **Parked product ideas** | Pharmacy orders, reorders/follow-ups, product dosage guidance, products visibility | build-scope §4.1 |
+
+---
+
+## D. Shipped thin — remaining scope tracked as tickets
+
+Three Week-4 features shipped as a **working thin slice**; their fuller spec was deferred and is now tracked as its own backlog ticket (Status: Backlog · Type: Build · Release: MVP #1), so nothing we deferred is buried inside a "Done" card.
+
+| New ticket | Shipped now (→ Done) | Remaining scope (new ticket) |
+|---|---|---|
+| **Ref 88** | Booking: *book → creates a Case* (Ref 79) | Pick a specific service/treatment. *(Time/scheduling already tracked as Ref 54.)* |
+| **Ref 89** | Intake: *reason + symptoms* form (Ref 80) | Eligibility + contraindication screening — needs clinical governance |
+| **Ref 90** | Intake *saved to the Case* (Ref 58) | Flag red flags to the clinician — needs clinical governance |
+
+**Also tracked (engineering hardening, not a feature gap):**
+- **Session token storage** — Supabase stores auth tokens in the browser's `localStorage` (fine for homework). Market-ready: move to httpOnly cookies / server-side auth to reduce token-theft (XSS) risk.
 
 ---
 
