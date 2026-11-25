@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Chip from "@mui/material/Chip";
+import MuiLink from "@mui/material/Link";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -231,6 +232,12 @@ export default function AccountPage() {
           <Button type="submit" variant="contained" size="large" disabled={loading}>
             {loading ? "Logging in…" : "Log in"}
           </Button>
+          <Typography variant="body2" color="text.secondary">
+            Need an account?{" "}
+            <MuiLink component={Link} href="/signup">
+              Sign up
+            </MuiLink>
+          </Typography>
         </Stack>
       </Box>
     </Container>

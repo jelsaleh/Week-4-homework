@@ -4,6 +4,8 @@
 // and talks to Supabase from the browser. On submit it calls supabase.auth.signUp;
 // Supabase creates the login, and our database trigger auto-creates the profile.
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import NextLink from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -12,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import MuiLink from "@mui/material/Link";
 
 export default function SignUpPage() {
   const [fullName, setFullName] = useState("");
@@ -19,7 +22,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +42,9 @@ export default function SignUpPage() {
       setError(signUpError.message);
       return;
     }
-    setSuccess(true);
+    // Email confirmation is off for the demo, so sign-up returns a live session
+    // (the user is now logged in). Send them straight to their dashboard.
+    router.push("/account");
   }
 
   return (
@@ -59,11 +64,6 @@ export default function SignUpPage() {
           </Typography>
 
           {error && <Alert severity="error">{error}</Alert>}
-          {success && (
-            <Alert severity="success">
-              Account created. If email confirmation is on, check your inbox, then log in.
-            </Alert>
-          )}
 
           <TextField
             label="Full name"
@@ -96,6 +96,12 @@ export default function SignUpPage() {
           <Button type="submit" variant="contained" size="large" disabled={loading}>
             {loading ? "Creating account…" : "Sign up"}
           </Button>
+          <Typography variant="body2" color="text.secondary">
+            Already have an account?{" "}
+            <MuiLink component={NextLink} href="/account">
+              Log in
+            </MuiLink>
+          </Typography>
         </Stack>
       </Box>
     </Container>
