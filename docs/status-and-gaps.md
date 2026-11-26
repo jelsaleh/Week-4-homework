@@ -1,6 +1,6 @@
 # Status & Gap Tracker — Week 4 build
 
-*Live snapshot of where the build stands, and the gaps to close for a market-ready product. Last updated: 2026-11-24.*
+*Live snapshot of where the build stands, and the gaps to close for a market-ready product. Last updated: 2026-11-26.*
 
 > **Decision (2026-11-23):** prioritise **finishing the Week 4 homework** to catch up with the curriculum. The full **market-ready** product is deferred to **after the course (December)** — the gaps below are tracked so they can be closed deliberately, not forgotten.
 
@@ -17,16 +17,16 @@
 | ≥ 3 ADRs in `docs/adr/` | ✅ Done (4) |
 | Database diagram in `docs/` | ✅ `docs/database-erd.md` |
 | Golden thread works end to end (book → case → intake → portal) | ✅ Done & verified live (Alice/Bob) |
-| Live on Vercel (public URL) | ✅ Done — tested on desktop (phone pending) |
-| Backlog tickets → Done | ✅ 11 shipped tickets moved to Done; 3 remaining-scope tickets tracked (Refs 88–90) |
-| Submission template + email teacher + repo submittable | 🟡 Pending — Jasmine fills the template (no AI); phone test + hand-in left |
+| Live on Vercel (public URL) | ✅ Done — tested on desktop + phone |
+| Backlog tickets → Done | ✅ 10 shipped tickets in Done (Refs 1, 2, 4, 5, 11, 13, 58, 62, 79, 80); 3 remaining-scope tickets tracked (Refs 88–90) |
+| Submission template + email teacher + repo submittable | ✅ Done — `Week 4 Coding Challenge/SUBMISSION.md` in repo + Notion submission page; repo public; emailed teacher |
 | *(optional)* usability test | ⬜ Not yet |
 
-## B. Remaining to finish the homework (ordered)
+## B. Homework finish — ✅ complete (2026-11-26)
 
 1. ~~**Thin golden thread**~~ ✅ **Done** — write-side RLS added; book → case → intake → portal works and was verified live.
-2. ~~**Deploy to Vercel**~~ ✅ **Done** — public URL live, desktop tested. **Left: open it on a phone and test (step 13).**
-3. **Submission** — fill the **Submission Template yourself (no AI)**; confirm the repo is submittable (public or add the teacher); hand in per the Week 4 assignment page.
+2. ~~**Deploy to Vercel**~~ ✅ **Done** — public URL live; tested on desktop + phone.
+3. ~~**Submission**~~ ✅ **Done** — write-up (self-authored) in `Week 4 Coding Challenge/SUBMISSION.md` + a Notion submission page; repo made public; emailed to the teacher.
 
 ---
 
@@ -64,4 +64,4 @@ Three Week-4 features shipped as a **working thin slice**; their fuller spec was
 
 ---
 
-**Bottom line:** the hardest, riskiest foundation (architecture, data model, security/RLS, auth) is **done and proven**. The homework finish is **breadth + deploy + submit**. The market-ready path is **mapped and launch-gated** — ready to resume in December.
+**Bottom line:** the hardest, riskiest foundation (architecture, data model, security/RLS, auth) is **done and proven**. The Week 4 homework is **complete and submitted**. The market-ready path is **mapped and launch-gated** — ready to resume in December.
